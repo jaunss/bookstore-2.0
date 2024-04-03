@@ -19,15 +19,16 @@
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul class="navbar-nav">
 						<li class="nav-item active"><a class="nav-link pl-lg-0"
-							href="inicio.jsp">Home<span class="sr-only">Início</span></a></li>
+							href="<%=request.getContextPath()%>/Home?acao=home">Home<span
+								class="sr-only">Home</span></a></li>
 						<li class="nav-item"><a class="nav-link"
-							href="<%=request.getContextPath()%>/paginas/livro/inserirLivro.jsp">Livros</a></li>
+							href="<%=request.getContextPath()%>/Livro?acao=inserirLivro">Livros</a></li>
 						<li class="nav-item"><a class="nav-link"
-							href="<%=request.getContextPath()%>/paginas/autor/inserirAutor.jsp">Autores</a></li>
+							href="<%=request.getContextPath()%>/Autor?acao=inserirAutor">Autores</a></li>
 						<li class="nav-item"><a class="nav-link"
-							href="<%=request.getContextPath()%>/paginas/editora/inserirEditora.jsp">Editoras</a></li>
+							href="<%=request.getContextPath()%>/Editora?acao=inserirEditora">Editoras</a></li>
 						<li class="nav-item"><a class="nav-link"
-							href="<%=request.getContextPath()%>/paginas/compra/carrinho.jsp">Carrinho</a></li>
+							href="<%=request.getContextPath()%>/Carrinho?acao=listarCarrinho">Carrinho</a></li>
 					</ul>
 					<form class="search_form">
 						<input type="text" class="form-control" placeholder="Pesquisar...">
