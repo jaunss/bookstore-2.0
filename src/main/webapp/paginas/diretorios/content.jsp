@@ -1,44 +1,30 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
-<div class="hero_area">
-	<!-- header section strats -->
-	<header class="header_section">
-		<div class="container-fluid">
-			<nav class="navbar navbar-expand-lg custom_nav-container">
-				<a class="navbar-brand" href="index.html"> <span>
-						Bookstore </span>
-				</a>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<nav class="navbar navbar-expand-lg bg-warning">
+	<div class="container-fluid">
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+			data-bs-target="#navbarSupportedContent"
+			aria-controls="navbarSupportedContent" aria-expanded="false"
+			aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
 
-				<button class="navbar-toggler" type="button" data-toggle="collapse"
-					data-target="#navbarSupportedContent"
-					aria-controls="navbarSupportedContent" aria-expanded="false"
-					aria-label="Toggle navigation">
-					<span class=""> </span>
-				</button>
-
-				<div class="collapse navbar-collapse" id="navbarSupportedContent">
-					<ul class="navbar-nav">
-						<li class="nav-item active"><a class="nav-link pl-lg-0"
-							href="<%=request.getContextPath()%>/Home?acao=home">Home<span
-								class="sr-only">Home</span></a></li>
-						<li class="nav-item"><a class="nav-link"
-							href="<%=request.getContextPath()%>/Livro?acao=inserirLivro">Livros</a></li>
-						<li class="nav-item"><a class="nav-link"
-							href="<%=request.getContextPath()%>/Autor?acao=inserirAutor">Autores</a></li>
-						<li class="nav-item"><a class="nav-link"
-							href="<%=request.getContextPath()%>/Editora?acao=inserirEditora">Editoras</a></li>
-						<li class="nav-item"><a class="nav-link"
-							href="<%=request.getContextPath()%>/Carrinho?acao=listarCarrinho">Carrinho</a></li>
-					</ul>
-					<form class="search_form">
-						<input type="text" class="form-control" placeholder="Pesquisar...">
-						<button value="Pesquisar" class="" type="submit">
-							<i class="fa fa-search" aria-hidden="true"></i>
-						</button>
-					</form>
-				</div>
-			</nav>
+		<div class="collapse navbar-collapse justify-content-center"
+			id="navbarSupportedContent">
+			<ul class="nav nav-underline mb-2 mb-lg-0">
+				<li class="nav-item"><a class="nav-link text-white"
+					href="<%=request.getContextPath()%>/inicio.jsp">Home</a></li>
+				<li class="nav-item"><a class="nav-link text-white"
+					href="<%=request.getContextPath()%>/paginas/autor/inserirAutor.jsp">Autores</a></li>
+				<li class="nav-item"><a class="nav-link text-white" href="#">Editoras</a></li>
+				<li class="nav-item"><a class="nav-link text-white" href="#">Livros</a></li>
+				<li class="nav-item"><a class="nav-link text-white" href="#">Compras</a></li>
+			</ul>
+			<form class="d-flex ms-auto" role="search">
+				<input class="form-control me-2" type="search" placeholder="Search"
+					aria-label="Search">
+				<button class="btn btn-outline-light" type="submit">Search</button>
+			</form>
 		</div>
-	</header>
-	<!-- end header section -->
-</div>
+	</div>
+</nav>

@@ -14,8 +14,6 @@
 	<jsp:include
 		page="${request.getContextPath()}/paginas/diretorios/content.jsp" />
 	<jsp:include
-		page="${request.getContextPath()}/paginas/diretorios/footer.jsp" />
-	<jsp:include
 		page="${request.getContextPath()}/paginas/diretorios/scripts-footer.jsp" />
 </body>
 

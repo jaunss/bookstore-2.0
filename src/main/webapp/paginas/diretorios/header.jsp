@@ -16,15 +16,5 @@
 
 <!-- bootstrap core css -->
 <link rel="stylesheet" type="text/css"
-	href="<%=request.getContextPath()%>/assets/css/bootstrap.css" />
+	href="<%=request.getContextPath()%>/assets/bootstrap-5.3.3/css/bootstrap.min.css" />
 <!-- font awesome style -->
-<link
-	href="<%=request.getContextPath()%>/assets/css/font-awesome.min.css"
-	rel="stylesheet" />
-
-<!-- Custom styles for this template -->
-<link href="<%=request.getContextPath()%>/assets/css/style.css"
-	rel="stylesheet" />
-<!-- responsive style -->
-<link href="<%=request.getContextPath()%>/assets/css/responsive.css"
-	rel="stylesheet" />

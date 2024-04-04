@@ -14,8 +14,9 @@
 	<jsp:include
 		page="${request.getContextPath()}/paginas/diretorios/content.jsp"></jsp:include>
 
+	<h2 class="text-center">Autores</h2>
 	<form action="<%=request.getContextPath()%>/Autor"
-		class="row g-3 needs-validation" novalidate method="POST">
+		class="needs-validation" novalidate method="POST">
 		<div class="container col-md-5">
 			<input type="hidden" id="codigo" name="codigo"
 				value="<c:out value="${autor.codigo}"/>">
@@ -60,15 +61,13 @@
 			<br />
 
 			<div class="text-center">
-				<button type="submit" class="btn btn-success">Inserir Autor</button>
+				<button type="submit" class="btn btn-outline-warning">Inserir
+					Autor</button>
 				<a href="<%=request.getContextPath()%>/Home?acao=home"
-					class="btn btn-warning">Voltar</a>
+					class="btn btn-outline-info">Voltar</a>
 			</div>
 		</div>
 	</form>
-
-	<jsp:include
-		page="${request.getContextPath()}/paginas/diretorios/footer.jsp" />
 
 	<script type="text/javascript">
 		(function() {
@@ -90,6 +89,7 @@
 			})
 		})()
 	</script>
+
 	<jsp:include
 		page="${request.getContextPath()}/paginas/diretorios/scripts-footer.jsp" />
 </body>
