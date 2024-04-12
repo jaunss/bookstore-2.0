@@ -15,7 +15,7 @@
 				<li class="nav-item"><a class="nav-link text-white"
 					href="<%=request.getContextPath()%>/inicio.jsp">Home</a></li>
 				<li class="nav-item"><a class="nav-link text-white"
-					href="<%=request.getContextPath()%>/paginas/autor/inserirAutor.jsp">Autores</a></li>
+					href="<%=request.getContextPath()%>/Autor?acao=listarAutores">Autores</a></li>
 				<li class="nav-item"><a class="nav-link text-white" href="#">Editoras</a></li>
 				<li class="nav-item"><a class="nav-link text-white" href="#">Livros</a></li>
 				<li class="nav-item"><a class="nav-link text-white" href="#">Compras</a></li>

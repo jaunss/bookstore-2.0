@@ -9,7 +9,7 @@ public class Autor {
 	private Long codigo;
 	private String nome;
 	private LocalDate dataNascimento;
-	private String nascionalidade;
+	private String nacionalidade;
 	private String biografia;
 	private Set<Livro> livros;
 
@@ -17,11 +17,11 @@ public class Autor {
 
 	}
 
-	public Autor(Long codigo, String nome, LocalDate dataNascimento, String nascionalidade, String biografia) {
+	public Autor(Long codigo, String nome, LocalDate dataNascimento, String nacionalidade, String biografia) {
 		this.codigo = codigo;
 		this.nome = nome;
 		this.dataNascimento = dataNascimento;
-		this.nascionalidade = nascionalidade;
+		this.nacionalidade = nacionalidade;
 		this.biografia = biografia;
 		this.livros = new HashSet<Livro>();
 	}
@@ -50,12 +50,12 @@ public class Autor {
 		this.dataNascimento = dataNascimento;
 	}
 
-	public String getNascionalidade() {
-		return nascionalidade;
+	public String getNacionalidade() {
+		return nacionalidade;
 	}
 
-	public void setNascionalidade(String nascionalidade) {
-		this.nascionalidade = nascionalidade;
+	public void setNacionalidade(String nacionalidade) {
+		this.nacionalidade = nacionalidade;
 	}
 
 	public String getBiografia() {

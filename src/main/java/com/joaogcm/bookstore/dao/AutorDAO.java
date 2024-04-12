@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,13 +30,13 @@ public class AutorDAO {
 	 */
 	public void inserirAutor(Autor autor) {
 		sqlQuery.setLength(0);
-		sqlQuery.append(
-				"INSERT INTO autor a (a.nome, a.dataNascimento, a.nacionalidade, a.biografia) VALUES (?, ?, ?, ?)");
+		sqlQuery.append("INSERT INTO autor (nome, dataNascimento, nacionalidade, biografia) VALUES (?, ?, ?, ?)");
 
 		try (PreparedStatement preparedStatement = conexao.prepareStatement(sqlQuery.toString())) {
 			preparedStatement.setString(1, autor.getNome());
-			preparedStatement.setDate(2, java.sql.Date.valueOf(autor.getDataNascimento()));
-			preparedStatement.setString(3, autor.getNascionalidade());
+			LocalDate dataNascimento = autor.getDataNascimento() != null ? autor.getDataNascimento() : LocalDate.now();
+			preparedStatement.setDate(2, java.sql.Date.valueOf(dataNascimento));
+			preparedStatement.setString(3, autor.getNacionalidade());
 			preparedStatement.setString(4, autor.getBiografia());
 
 			preparedStatement.executeUpdate();
@@ -53,12 +54,13 @@ public class AutorDAO {
 	public void atualizarAutor(Autor autor) {
 		sqlQuery.setLength(0);
 		sqlQuery.append(
-				"UPDATE autor a SET a.nome = ?, a.dataNascimento = ?, a.nacionalidade = :, a.biografia = ? WHERE a.codigo = ? ");
+				"UPDATE autor SET nome = ?, dataNascimento = ?, nacionalidade = ?, biografia = ? WHERE codigo = ? ");
 
 		try (PreparedStatement preparedStatement = conexao.prepareStatement(sqlQuery.toString())) {
 			preparedStatement.setString(1, autor.getNome());
-			preparedStatement.setDate(2, java.sql.Date.valueOf(autor.getDataNascimento()));
-			preparedStatement.setString(3, autor.getNascionalidade());
+			LocalDate dataNascimento = autor.getDataNascimento() != null ? autor.getDataNascimento() : LocalDate.now();
+			preparedStatement.setDate(2, java.sql.Date.valueOf(dataNascimento));
+			preparedStatement.setString(3, autor.getNacionalidade());
 			preparedStatement.setString(4, autor.getBiografia());
 			preparedStatement.setLong(5, autor.getCodigo());
 
@@ -76,7 +78,7 @@ public class AutorDAO {
 	 */
 	public void removerAutor(Autor autor) {
 		sqlQuery.setLength(0);
-		sqlQuery.append("DELETE FROM autor a WHERE a.codigo = ?");
+		sqlQuery.append("DELETE FROM autor WHERE codigo = ?");
 
 		try (PreparedStatement preparedStatement = conexao.prepareStatement(sqlQuery.toString())) {
 			preparedStatement.setLong(1, autor.getCodigo());
@@ -94,18 +96,19 @@ public class AutorDAO {
 	 */
 	public Set<Autor> listarAutores() {
 		sqlQuery.setLength(0);
-		sqlQuery.append("SELECT * FROM autor a");
+		sqlQuery.append("SELECT * FROM autor");
 
 		Set<Autor> autores = new HashSet<Autor>();
-		Autor autor = new Autor();
 
 		try (PreparedStatement preparedStatement = conexao.prepareStatement(sqlQuery.toString());
 				ResultSet resultSet = preparedStatement.executeQuery()) {
 			while (resultSet.next()) {
-				autor.setCodigo(resultSet.getLong("a.codigo"));
-				autor.setNome(resultSet.getString("a.nome"));
-				autor.setDataNascimento(resultSet.getDate("a.dataNascimento").toLocalDate());
-				autor.setNascionalidade(resultSet.getString("nacionalidade"));
+				Autor autor = new Autor();
+
+				autor.setCodigo(resultSet.getLong("codigo"));
+				autor.setNome(resultSet.getString("nome"));
+				autor.setDataNascimento(resultSet.getDate("dataNascimento").toLocalDate());
+				autor.setNacionalidade(resultSet.getString("nacionalidade"));
 				autor.setBiografia(resultSet.getString("biografia"));
 
 				autores.add(autor);
@@ -124,17 +127,17 @@ public class AutorDAO {
 	 */
 	public Autor listarAutorPorCodigo(Autor autor) {
 		sqlQuery.setLength(0);
-		sqlQuery.append("SELECT * FROM autor a WHERE a.codigo = ?");
-
-		autor = new Autor();
+		sqlQuery.append("SELECT * FROM autor WHERE codigo = ?");
 
 		try (PreparedStatement preparedStatement = conexao.prepareStatement(sqlQuery.toString());
 				ResultSet resultSet = preparedStatement.executeQuery()) {
 			while (resultSet.next()) {
-				autor.setCodigo(resultSet.getLong("a.codigo"));
-				autor.setNome(resultSet.getString("a.nome"));
-				autor.setDataNascimento(resultSet.getDate("a.dataNascimento").toLocalDate());
-				autor.setNascionalidade(resultSet.getString("nacionalidade"));
+				autor = new Autor();
+
+				autor.setCodigo(resultSet.getLong("codigo"));
+				autor.setNome(resultSet.getString("nome"));
+				autor.setDataNascimento(resultSet.getDate("dataNascimento").toLocalDate());
+				autor.setNacionalidade(resultSet.getString("nacionalidade"));
 				autor.setBiografia(resultSet.getString("biografia"));
 			}
 		} catch (SQLException e) {

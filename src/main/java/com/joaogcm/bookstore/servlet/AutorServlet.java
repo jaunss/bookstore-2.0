@@ -1,6 +1,7 @@
 package com.joaogcm.bookstore.servlet;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -20,6 +21,8 @@ public class AutorServlet extends HttpServlet {
 
 	private Autor autor = null;
 	private AutorService autorService = null;
+	private RequestDispatcher requestDispatcher = null;
+	private String mensagem = "";
 
 	public AutorServlet() throws ServletException {
 		super();
@@ -36,32 +39,93 @@ public class AutorServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
+			autor = new Autor();
+
 			String acao = request.getParameter("acao");
 
 			if (acao.equalsIgnoreCase("inserirAutor")) {
-				RequestDispatcher requestDispatcher = request.getRequestDispatcher("/paginas/autor/inserirAutor.jsp");
+				requestDispatcher = request.getRequestDispatcher("/paginas/autor/inserirAutor.jsp");
 				requestDispatcher.forward(request, response);
 
 			} else if (acao.equalsIgnoreCase("atualizarAutor")) {
+				String codigo = request.getParameter("codigo");
+				autor.setCodigo(codigo != null && !codigo.isEmpty() ? Long.parseLong(codigo) : null);
+
+				autor = autorService.listarAutorPorCodigo(autor);
+
+				if (autor != null && autor.getCodigo() != null) {
+					requestDispatcher = request.getRequestDispatcher("/paginas/autor/inserirAutor.jsp");
+					request.setAttribute("autor", autor);
+					requestDispatcher.forward(request, response);
+				}
 
 			} else if (acao.equalsIgnoreCase("removerAutor")) {
+				String codigo = request.getParameter("codigo");
+				autor.setCodigo(codigo != null && !codigo.isEmpty() ? Long.parseLong(codigo) : null);
+
+				autor = autorService.listarAutorPorCodigo(autor);
+
+				if (autor != null && autor.getCodigo() != null) {
+					autorService.removerAutor(autor);
+
+					mensagem = "Autor excluído com sucesso!";
+				} else {
+					mensagem = "Não foi possível encontrar o Autor!";
+				}
+
+				requestDispatcher = request.getRequestDispatcher("/paginas/autor/listarAutor.jsp");
+				request.setAttribute("listarAutores", autorService.listarAutores());
+				request.setAttribute("mensagem", mensagem);
+				requestDispatcher.forward(request, response);
 
 			} else if (acao.equalsIgnoreCase("listarAutores")) {
-				RequestDispatcher requestDispatcher = request.getRequestDispatcher("");
+				requestDispatcher = request.getRequestDispatcher("/paginas/autor/listarAutor.jsp");
 				request.setAttribute("listarAutores", autorService.listarAutores());
 				requestDispatcher.forward(request, response);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			requestDispatcher = request.getRequestDispatcher("/paginas/autor/listarAutor.jsp");
+			request.setAttribute("mensagem", "Ocorreu um erro inesperado ao tentar acessar uma das páginas do Autor!");
+			requestDispatcher.forward(request, response);
 		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
+			autor = new Autor();
 
+			String codigo = request.getParameter("codigo");
+			String nome = request.getParameter("nome");
+			String dataNascimento = request.getParameter("dataNascimento");
+			String nacionalidade = request.getParameter("nacionalidade");
+			String biografia = request.getParameter("biografia");
+
+			autor.setCodigo(codigo != null && !codigo.isEmpty() ? Long.parseLong(codigo) : null);
+			autor.setNome(nome);
+			autor.setDataNascimento(
+					dataNascimento != null && !dataNascimento.isEmpty() ? LocalDate.parse(dataNascimento) : null);
+			autor.setNacionalidade(nacionalidade);
+			autor.setBiografia(biografia);
+
+			if (autor.getCodigo() != null) {
+				autorService.atualizarAutor(autor);
+
+				mensagem = "Autor atualizado com sucesso!";
+			} else {
+				autorService.inserirAutor(autor);
+
+				mensagem = "Autor inserido com sucesso!";
+			}
+
+			requestDispatcher = request.getRequestDispatcher("/paginas/autor/listarAutor.jsp");
+			request.setAttribute("listarAutores", autorService.listarAutores());
+			request.setAttribute("mensagem", mensagem);
+			requestDispatcher.forward(request, response);
 		} catch (Exception e) {
-			e.printStackTrace();
+			requestDispatcher = request.getRequestDispatcher("/paginas/autor/listarAutor.jsp");
+			request.setAttribute("mensagem", "Ocorreu um erro inesperado ao tentar Atualizar e/ou Inserir o Autor!");
+			requestDispatcher.forward(request, response);
 		}
 	}
 }

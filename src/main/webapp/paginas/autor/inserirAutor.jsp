@@ -30,7 +30,7 @@
 				<div class="valid-feedback">Ok!</div>
 			</div>
 
-			<div class="form-group">
+			<!--<div class="form-group">
 				<label for="dataNascimento">Data de Nascimento</label> <input
 					type="date" id="dataNascimento" name="dataNascimento"
 					value="<c:out value="${autor.dataNascimento}"/>"
@@ -39,7 +39,7 @@
 				<div class="invalid-feedback">Data de Nascimento é
 					obrigatória!</div>
 				<div class="valid-feedback">Ok!</div>
-			</div>
+			</div>-->
 
 			<div class="form-group">
 				<label for="nacionalidade">Nacionalidade</label> <input type="text"
@@ -54,8 +54,7 @@
 			<div class="form-group">
 				<label for="biografia">Biografia</label>
 				<textarea rows="10" cols="10" id="biografia" name="biografia"
-					class="form-control" maxlength="1000" required="required"
-					autocomplete="off"></textarea>
+					class="form-control" maxlength="1000" autocomplete="off"></textarea>
 			</div>
 
 			<br />

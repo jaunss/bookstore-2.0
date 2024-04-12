@@ -24,7 +24,7 @@ public class ConexaoBancoDeDados {
 			hikariConfig.setMinimumIdle(10);
 			hikariConfig.setMaximumPoolSize(40);
 			hikariConfig.setIdleTimeout(10000);
-			hikariConfig.setAutoCommit(false);
+			hikariConfig.setAutoCommit(true);
 
 			hikariDataSource = new HikariDataSource(hikariConfig);
 		}
