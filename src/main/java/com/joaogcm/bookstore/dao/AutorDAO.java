@@ -1,10 +1,12 @@
 package com.joaogcm.bookstore.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,8 +36,7 @@ public class AutorDAO {
 
 		try (PreparedStatement preparedStatement = conexao.prepareStatement(sqlQuery.toString())) {
 			preparedStatement.setString(1, autor.getNome());
-			LocalDate dataNascimento = autor.getDataNascimento() != null ? autor.getDataNascimento() : LocalDate.now();
-			preparedStatement.setDate(2, java.sql.Date.valueOf(dataNascimento));
+			preparedStatement.setDate(2, new Date(autor.getDataNascimento().getTime()));
 			preparedStatement.setString(3, autor.getNacionalidade());
 			preparedStatement.setString(4, autor.getBiografia());
 
@@ -58,8 +59,7 @@ public class AutorDAO {
 
 		try (PreparedStatement preparedStatement = conexao.prepareStatement(sqlQuery.toString())) {
 			preparedStatement.setString(1, autor.getNome());
-			LocalDate dataNascimento = autor.getDataNascimento() != null ? autor.getDataNascimento() : LocalDate.now();
-			preparedStatement.setDate(2, java.sql.Date.valueOf(dataNascimento));
+			preparedStatement.setDate(2, new Date(autor.getDataNascimento().getTime()));
 			preparedStatement.setString(3, autor.getNacionalidade());
 			preparedStatement.setString(4, autor.getBiografia());
 			preparedStatement.setLong(5, autor.getCodigo());
@@ -93,21 +93,27 @@ public class AutorDAO {
 	 * Retorna todos os autores que estão cadastrados no banco de dados
 	 * 
 	 * @return autores
+	 * @throws ParseException
 	 */
-	public Set<Autor> listarAutores() {
+	public Set<Autor> listarAutores() throws ParseException {
 		sqlQuery.setLength(0);
 		sqlQuery.append("SELECT * FROM autor");
 
 		Set<Autor> autores = new HashSet<Autor>();
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-		try (PreparedStatement preparedStatement = conexao.prepareStatement(sqlQuery.toString());
-				ResultSet resultSet = preparedStatement.executeQuery()) {
+		try (PreparedStatement preparedStatement = conexao.prepareStatement(sqlQuery.toString())) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+
 			while (resultSet.next()) {
 				Autor autor = new Autor();
 
 				autor.setCodigo(resultSet.getLong("codigo"));
 				autor.setNome(resultSet.getString("nome"));
-				autor.setDataNascimento(resultSet.getDate("dataNascimento").toLocalDate());
+
+				autor.setDataNascimento(resultSet.getDate("dataNascimento"));
+				autor.setDataNascimentoFormatada(simpleDateFormat.format(autor.getDataNascimento()));
+
 				autor.setNacionalidade(resultSet.getString("nacionalidade"));
 				autor.setBiografia(resultSet.getString("biografia"));
 
@@ -129,14 +135,16 @@ public class AutorDAO {
 		sqlQuery.setLength(0);
 		sqlQuery.append("SELECT * FROM autor WHERE codigo = ?");
 
-		try (PreparedStatement preparedStatement = conexao.prepareStatement(sqlQuery.toString());
-				ResultSet resultSet = preparedStatement.executeQuery()) {
+		try (PreparedStatement preparedStatement = conexao.prepareStatement(sqlQuery.toString())) {
+			preparedStatement.setLong(1, autor.getCodigo());
+			ResultSet resultSet = preparedStatement.executeQuery();
+
 			while (resultSet.next()) {
 				autor = new Autor();
 
 				autor.setCodigo(resultSet.getLong("codigo"));
 				autor.setNome(resultSet.getString("nome"));
-				autor.setDataNascimento(resultSet.getDate("dataNascimento").toLocalDate());
+				autor.setDataNascimento(resultSet.getDate("dataNascimento"));
 				autor.setNacionalidade(resultSet.getString("nacionalidade"));
 				autor.setBiografia(resultSet.getString("biografia"));
 			}
@@ -145,5 +153,36 @@ public class AutorDAO {
 		}
 
 		return autor;
+	}
+
+	public Set<Autor> listarAutoresPorNome(String nome) {
+		sqlQuery.setLength(0);
+		sqlQuery.append("SELECT * FROM autor a WHERE UPPER(a.nome) LIKE UPPER('%" + nome + "%')");
+
+		Set<Autor> autores = new HashSet<Autor>();
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+		try (PreparedStatement preparedStatement = conexao.prepareStatement(sqlQuery.toString())) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				Autor autor = new Autor();
+
+				autor.setCodigo(resultSet.getLong("codigo"));
+				autor.setNome(resultSet.getString("nome"));
+
+				autor.setDataNascimento(resultSet.getDate("dataNascimento"));
+				autor.setDataNascimentoFormatada(simpleDateFormat.format(autor.getDataNascimento()));
+
+				autor.setNacionalidade(resultSet.getString("nacionalidade"));
+				autor.setBiografia(resultSet.getString("biografia"));
+
+				autores.add(autor);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return autores;
 	}
 }

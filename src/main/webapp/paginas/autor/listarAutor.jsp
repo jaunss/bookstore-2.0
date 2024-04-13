@@ -18,6 +18,20 @@
 	<h2 class="text-center">Autores</h2>
 
 	<div class="text-center">${mensagem}</div>
+
+	<br />
+
+	<form action="<%=request.getContextPath()%>/Autor" method="POST"
+		class="form-inline" id="idBuscaAutores">
+		<div class="input-group">
+			<input type="search" class="form-control text-center"
+				name="nomeAutor" placeholder="Pesquisar Autor">
+			<button type="submit" class="btn btn-outline-success">Buscar</button>
+		</div>
+	</form>
+
+	<br />
+
 	<table
 		class="table table-hover table-striped table-bordered table-warning"
 		id="listarAutor">
@@ -36,7 +50,7 @@
 			<c:forEach var="autor" items="${listarAutores}">
 				<tr>
 					<td><c:out value="${autor.nome}" /></td>
-					<td><c:out value="${autor.dataNascimento}" /></td>
+					<td><c:out value="${autor.dataNascimentoFormatada}" /></td>
 					<td><c:out value="${autor.nacionalidade}" /></td>
 					<td><c:out value="${autor.biografia}" /></td>
 					<td><a
@@ -55,6 +69,27 @@
 
 	<jsp:include
 		page="${request.getContextPath()}/paginas/diretorios/scripts-footer.jsp" />
+	<script type="text/javascript">
+		$(document).ready(function() {
+  			$("#idBuscaAutores").submit(function(event) {
+    		event.preventDefault();
+    		
+    		var nomeAutor = $("#idBuscaAutores input[name='nomeAutor']").val();
+    		$.ajax({
+    			url: "<%=request.getContextPath()%>/Autor?acaoBuscar=listarAutoresPorNome",
+    			method: "POST",
+    			data: { nomeAutor: nomeAutor },
+    			success: function(response) {
+    				$("#listarAutor tbody").html(response);
+    				},
+    				error: function(xhr, status, error) {
+    					console.error("Error:", xhr, status, error);
+    					$("#listarAutor tbody").html("Error retrieving results.");
+    					}
+    				});
+    		});
+  		});
+</script>
 </body>
 
 </html>

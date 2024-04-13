@@ -59,4 +59,16 @@ public class AutorService {
 
 		return autor;
 	}
+
+	public Set<Autor> listarAutoresPorNome(String nome) {
+		Set<Autor> autores = new HashSet<Autor>();
+
+		try {
+			autores = autorDAO.listarAutoresPorNome(nome);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return autores;
+	}
 }

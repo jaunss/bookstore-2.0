@@ -1,6 +1,6 @@
 package com.joaogcm.bookstore.model;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -8,7 +8,8 @@ public class Autor {
 
 	private Long codigo;
 	private String nome;
-	private LocalDate dataNascimento;
+	private Date dataNascimento;
+	private String dataNascimentoFormatada;
 	private String nacionalidade;
 	private String biografia;
 	private Set<Livro> livros;
@@ -17,10 +18,12 @@ public class Autor {
 
 	}
 
-	public Autor(Long codigo, String nome, LocalDate dataNascimento, String nacionalidade, String biografia) {
+	public Autor(Long codigo, String nome, Date dataNascimento, String dataNascimentoFormatada, String nacionalidade,
+			String biografia) {
 		this.codigo = codigo;
 		this.nome = nome;
 		this.dataNascimento = dataNascimento;
+		this.dataNascimentoFormatada = dataNascimentoFormatada;
 		this.nacionalidade = nacionalidade;
 		this.biografia = biografia;
 		this.livros = new HashSet<Livro>();
@@ -42,12 +45,20 @@ public class Autor {
 		this.nome = nome;
 	}
 
-	public LocalDate getDataNascimento() {
+	public Date getDataNascimento() {
 		return dataNascimento;
 	}
 
-	public void setDataNascimento(LocalDate dataNascimento) {
+	public void setDataNascimento(Date dataNascimento) {
 		this.dataNascimento = dataNascimento;
+	}
+
+	public String getDataNascimentoFormatada() {
+		return dataNascimentoFormatada;
+	}
+
+	public void setDataNascimentoFormatada(String dataNascimentoFormatada) {
+		this.dataNascimentoFormatada = dataNascimentoFormatada;
 	}
 
 	public String getNacionalidade() {
