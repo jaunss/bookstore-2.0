@@ -96,7 +96,7 @@ public class AutorServlet extends HttpServlet {
 			throws ServletException, IOException {
 		try {
 			autor = new Autor();
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("aaaa/MM/dd");
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/aaaa");
 
 			String acaoBuscar = request.getParameter("acaoBuscar");
 
@@ -133,7 +133,7 @@ public class AutorServlet extends HttpServlet {
 				String nomeAutor = request.getParameter("nomeAutor");
 
 				Set<Autor> resultadoBuscaAutores = autorService.listarAutoresPorNome(nomeAutor);
-				String resultadosBusca = processSearchResultsForTable(resultadoBuscaAutores);
+				String resultadosBusca = processarResultadosPorAutor(resultadoBuscaAutores);
 
 				response.setContentType("text/html");
 				PrintWriter out = response.getWriter();
@@ -148,7 +148,7 @@ public class AutorServlet extends HttpServlet {
 		}
 	}
 
-	private String processSearchResultsForTable(Set<Autor> autores) {
+	private String processarResultadosPorAutor(Set<Autor> autores) {
 		StringBuilder sb = new StringBuilder();
 
 		if (autores.isEmpty()) {

@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt"%>
 
 <!DOCTYPE html>
 <html>
@@ -21,20 +20,9 @@
 
 	<br />
 
-	<form action="<%=request.getContextPath()%>/Autor" method="POST"
-		class="form-inline" id="idBuscaAutores">
-		<div class="input-group">
-			<input type="search" class="form-control text-center"
-				name="nomeAutor" placeholder="Pesquisar Autor">
-			<button type="submit" class="btn btn-outline-success">Buscar</button>
-		</div>
-	</form>
-
-	<br />
-
-	<table
+	<table id="listarAutor"
 		class="table table-hover table-striped table-bordered table-warning"
-		id="listarAutor">
+		style="width: 100%">
 		<thead>
 			<tr>
 				<th>Nome</th>
@@ -71,25 +59,25 @@
 		page="${request.getContextPath()}/paginas/diretorios/scripts-footer.jsp" />
 	<script type="text/javascript">
 		$(document).ready(function() {
-  			$("#idBuscaAutores").submit(function(event) {
-    		event.preventDefault();
-    		
-    		var nomeAutor = $("#idBuscaAutores input[name='nomeAutor']").val();
-    		$.ajax({
-    			url: "<%=request.getContextPath()%>/Autor?acaoBuscar=listarAutoresPorNome",
-    			method: "POST",
-    			data: { nomeAutor: nomeAutor },
-    			success: function(response) {
-    				$("#listarAutor tbody").html(response);
-    				},
-    				error: function(xhr, status, error) {
-    					console.error("Error:", xhr, status, error);
-    					$("#listarAutor tbody").html("Error retrieving results.");
-    					}
-    				});
-    		});
-  		});
-</script>
+		    $("#listarAutor").DataTable({
+		        language: {
+		            "search": "Buscar Autor",
+		            "entries": "Registros",
+		            "info": "Mostrando _START_ até _END_ de _TOTAL_ registros",
+		            "infoFiltered": "(filtrados de _MAX_ registros)",
+		            "zeroRecords": "Nenhum registro encontrado",
+		            "paginate": {
+		                "previous": "Anterior",
+		                "next": "Próximo"
+		            }
+		        },
+		        lengthMenu: [
+		            [5, 10, 25, 50, -1],
+		            ["5", "10", "25", "50", "Todos"]
+		        ]
+		    });
+		});
+	</script>
 </body>
 
 </html>

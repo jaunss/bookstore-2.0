@@ -34,8 +34,7 @@
 				<label for="dataNascimento">Data de Nascimento</label> <input
 					type="date" id="dataNascimento" name="dataNascimento"
 					value="<c:out value="${autor.dataNascimento}"/>"
-					class="form-control" maxlength="40" required="required"
-					autocomplete="off">
+					class="form-control" required="required" autocomplete="off">
 				<div class="invalid-feedback">Data de Nascimento é
 					obrigatória!</div>
 				<div class="valid-feedback">Ok!</div>
@@ -62,7 +61,7 @@
 			<div class="text-center">
 				<button type="submit" class="btn btn-outline-warning">Inserir
 					Autor</button>
-				<a href="<%=request.getContextPath()%>/Home?acao=home"
+				<a href="<%=request.getContextPath()%>/Autor?acao=listarAutores"
 					class="btn btn-outline-info">Voltar</a>
 			</div>
 		</div>

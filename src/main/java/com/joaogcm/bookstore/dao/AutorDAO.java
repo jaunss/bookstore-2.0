@@ -157,12 +157,13 @@ public class AutorDAO {
 
 	public Set<Autor> listarAutoresPorNome(String nome) {
 		sqlQuery.setLength(0);
-		sqlQuery.append("SELECT * FROM autor a WHERE UPPER(a.nome) LIKE UPPER('%" + nome + "%')");
+		sqlQuery.append("SELECT * FROM autor a WHERE UPPER(a.nome) LIKE UPPER('%' || ? || '%') ");
 
 		Set<Autor> autores = new HashSet<Autor>();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
 		try (PreparedStatement preparedStatement = conexao.prepareStatement(sqlQuery.toString())) {
+			preparedStatement.setString(1, nome);
 			ResultSet resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
