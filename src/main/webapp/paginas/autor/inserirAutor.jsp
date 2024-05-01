@@ -34,7 +34,8 @@
 				<label for="dataNascimento">Data de Nascimento</label> <input
 					type="date" id="dataNascimento" name="dataNascimento"
 					value="<c:out value="${autor.dataNascimento}"/>"
-					class="form-control" required="required" autocomplete="off">
+					class="form-control" pattern="yyyy-MM-dd" required="required"
+					autocomplete="off">
 				<div class="invalid-feedback">Data de Nascimento é
 					obrigatória!</div>
 				<div class="valid-feedback">Ok!</div>
@@ -53,7 +54,8 @@
 			<div class="form-group">
 				<label for="biografia">Biografia</label>
 				<textarea rows="10" cols="10" id="biografia" name="biografia"
-					class="form-control" maxlength="1000" autocomplete="off"></textarea>
+					value="<c:out value="${autor.biografia}"/>" class="form-control"
+					maxlength="500" autocomplete="off"></textarea>
 			</div>
 
 			<br />

@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -100,7 +99,6 @@ public class AutorDAO {
 		sqlQuery.append("SELECT * FROM autor");
 
 		Set<Autor> autores = new HashSet<Autor>();
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
 		try (PreparedStatement preparedStatement = conexao.prepareStatement(sqlQuery.toString())) {
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -110,10 +108,7 @@ public class AutorDAO {
 
 				autor.setCodigo(resultSet.getLong("codigo"));
 				autor.setNome(resultSet.getString("nome"));
-
 				autor.setDataNascimento(resultSet.getDate("dataNascimento"));
-				autor.setDataNascimentoFormatada(simpleDateFormat.format(autor.getDataNascimento()));
-
 				autor.setNacionalidade(resultSet.getString("nacionalidade"));
 				autor.setBiografia(resultSet.getString("biografia"));
 
@@ -160,7 +155,6 @@ public class AutorDAO {
 		sqlQuery.append("SELECT * FROM autor a WHERE UPPER(a.nome) LIKE UPPER('%' || ? || '%') ");
 
 		Set<Autor> autores = new HashSet<Autor>();
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
 		try (PreparedStatement preparedStatement = conexao.prepareStatement(sqlQuery.toString())) {
 			preparedStatement.setString(1, nome);
@@ -171,10 +165,7 @@ public class AutorDAO {
 
 				autor.setCodigo(resultSet.getLong("codigo"));
 				autor.setNome(resultSet.getString("nome"));
-
 				autor.setDataNascimento(resultSet.getDate("dataNascimento"));
-				autor.setDataNascimentoFormatada(simpleDateFormat.format(autor.getDataNascimento()));
-
 				autor.setNacionalidade(resultSet.getString("nacionalidade"));
 				autor.setBiografia(resultSet.getString("biografia"));
 

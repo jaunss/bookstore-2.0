@@ -29,15 +29,20 @@ public class ClienteDAO {
 	 */
 	public void inserirCliente(Cliente cliente) {
 		sqlQuery.setLength(0);
-		sqlQuery.append("INSERT INTO cliente c (c.nome, c.cpf, c.email, c.endereco, c.telefone) VALUES (?, ?, ?, ?, ?");
+		sqlQuery.append(
+				"INSERT INTO cliente c (c.nome, c.cpf, c.email, c.cep, c.logradouro, c.bairro, c.cidade, c.estado, c.telefone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?");
 
 		try (PreparedStatement preparedStatement = conexao.prepareStatement(sqlQuery.toString())) {
 
 			preparedStatement.setString(1, cliente.getNome());
 			preparedStatement.setString(2, cliente.getCpf());
 			preparedStatement.setString(3, cliente.getEmail());
-			preparedStatement.setString(4, cliente.getEndereco());
-			preparedStatement.setString(5, cliente.getTelefone());
+			preparedStatement.setString(4, cliente.getCep());
+			preparedStatement.setString(5, cliente.getLogradouro());
+			preparedStatement.setString(6, cliente.getBairro());
+			preparedStatement.setString(7, cliente.getCidade());
+			preparedStatement.setString(8, cliente.getEstado());
+			preparedStatement.setString(9, cliente.getTelefone());
 
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
@@ -53,15 +58,19 @@ public class ClienteDAO {
 	public void atualizarCliente(Cliente cliente) {
 		sqlQuery.setLength(0);
 		sqlQuery.append(
-				"UPDATE cliente c SET c.nome = ?, c.cpf = ?, c.email = ?, c.endereco = ?, c.telefone = ? WHERE c.codigo = ?");
+				"UPDATE cliente c SET c.nome = ?, c.cpf = ?, c.email = ?, c.cep, c.logradouro, c.bairro, c.cidade, c.estado, c.telefone = ? WHERE c.codigo = ?");
 
 		try (PreparedStatement preparedStatement = conexao.prepareStatement(sqlQuery.toString())) {
 			preparedStatement.setString(1, cliente.getNome());
 			preparedStatement.setString(2, cliente.getCpf());
 			preparedStatement.setString(3, cliente.getEmail());
-			preparedStatement.setString(4, cliente.getEndereco());
-			preparedStatement.setString(5, cliente.getTelefone());
-			preparedStatement.setLong(6, cliente.getCodigo());
+			preparedStatement.setString(4, cliente.getCep());
+			preparedStatement.setString(5, cliente.getLogradouro());
+			preparedStatement.setString(6, cliente.getBairro());
+			preparedStatement.setString(7, cliente.getCidade());
+			preparedStatement.setString(8, cliente.getEstado());
+			preparedStatement.setString(9, cliente.getTelefone());
+			preparedStatement.setLong(10, cliente.getCodigo());
 
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
@@ -107,7 +116,11 @@ public class ClienteDAO {
 				cliente.setNome(resultSet.getString("c.nome"));
 				cliente.setCpf(resultSet.getString("c.cpf"));
 				cliente.setEmail(resultSet.getString("c.email"));
-				cliente.setEndereco(resultSet.getString("c.endereco"));
+				cliente.setCep(resultSet.getString("c.cep"));
+				cliente.setLogradouro(resultSet.getString("c.logradouro"));
+				cliente.setBairro(resultSet.getString("c.bairro"));
+				cliente.setCidade(resultSet.getString("c.cidade"));
+				cliente.setEstado(resultSet.getString("c.estado"));
 				cliente.setTelefone(resultSet.getString("c.telefone"));
 
 				clientes.add(cliente);
@@ -138,7 +151,11 @@ public class ClienteDAO {
 				cliente.setNome(resultSet.getString("c.nome"));
 				cliente.setCpf(resultSet.getString("c.cpf"));
 				cliente.setEmail(resultSet.getString("c.email"));
-				cliente.setEndereco(resultSet.getString("c.endereco"));
+				cliente.setCep(resultSet.getString("c.cep"));
+				cliente.setLogradouro(resultSet.getString("c.logradouro"));
+				cliente.setBairro(resultSet.getString("c.bairro"));
+				cliente.setCidade(resultSet.getString("c.cidade"));
+				cliente.setEstado(resultSet.getString("c.estado"));
 				cliente.setTelefone(resultSet.getString("c.telefone"));
 			}
 		} catch (SQLException e) {

@@ -25,28 +25,28 @@
 		style="width: 100%">
 		<thead>
 			<tr>
-				<th>Nome</th>
-				<th>Data de Nascimento</th>
-				<th>Nacionalidade</th>
-				<th>Biografia</th>
-				<th>Atualizar</th>
-				<th>Remover</th>
+				<th class="text-center">Nome</th>
+				<th class="text-center">Data de Nascimento</th>
+				<th class="text-center">Nacionalidade</th>
+				<th class="text-center">Biografia</th>
+				<th class="text-center">Atualizar</th>
+				<th class="text-center">Remover</th>
 			</tr>
 		</thead>
 
 		<tbody>
 			<c:forEach var="autor" items="${listarAutores}">
 				<tr>
-					<td><c:out value="${autor.nome}" /></td>
-					<td><c:out value="${autor.dataNascimentoFormatada}" /></td>
-					<td><c:out value="${autor.nacionalidade}" /></td>
-					<td><c:out value="${autor.biografia}" /></td>
-					<td><a
-						href="<%=request.getContextPath()%>/Autor?acao=atualizarAutor&codigo=${autor.codigo}"><i
-							class="glyphicon glyphicon-pencil"></i></a></td>
-					<td><a
-						href="<%=request.getContextPath()%>/Autor?acao=removerAutor&codigo=${autor.codigo}"><i
-							class="glyphicon glyphicon-trash"></i></a></td>
+					<td class="text-center"><c:out value="${autor.nome}" /></td>
+					<td class="text-center"><c:out value="${autor.dataNascimento}" /></td>
+					<td class="text-center"><c:out value="${autor.nacionalidade}" /></td>
+					<td class="text-center"><c:out value="${autor.biografia}" /></td>
+					<td class="text-center"><a
+						href="<%=request.getContextPath()%>/Autor?acao=atualizarAutor&codigo=${autor.codigo}">
+							<img src="<%=request.getContextPath()%>/icons/pencil.png"></a></td>
+					<td class="text-center"><a
+						href="<%=request.getContextPath()%>/Autor?acao=removerAutor&codigo=${autor.codigo}">
+							<img src="<%=request.getContextPath()%>/icons/trash.png"></a></td>
 				</tr>
 			</c:forEach>
 		</tbody>
@@ -62,10 +62,13 @@
 		    $("#listarAutor").DataTable({
 		        language: {
 		            "search": "Buscar Autor",
+		            "lengthMenu": "Mostrando _MENU_ registros por página",
+		            "info": "Mostrando _START_ até _END_ (de _TOTAL_ registros)",
+		            "infoEmpty": "Mostrando _START_ até _END_ (de _TOTAL_ registros)",
 		            "entries": "Registros",
-		            "info": "Mostrando _START_ até _END_ de _TOTAL_ registros",
 		            "infoFiltered": "(filtrados de _MAX_ registros)",
-		            "zeroRecords": "Nenhum registro encontrado",
+		            "zeroRecords": "Nenhum registro encontrado!",
+		            "emptyTable": "Nenhum registro encontrado!",
 		            "paginate": {
 		                "previous": "Anterior",
 		                "next": "Próximo"

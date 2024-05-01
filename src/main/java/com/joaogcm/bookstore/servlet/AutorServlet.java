@@ -1,9 +1,9 @@
 package com.joaogcm.bookstore.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.text.Normalizer;
 import java.text.SimpleDateFormat;
-import java.util.Set;
+import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,11 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.joaogcm.bookstore.dao.AutorDAO;
+import com.joaogcm.bookstore.estabelecer.conexao.EstabelecerConexaoImpl;
 import com.joaogcm.bookstore.model.Autor;
 import com.joaogcm.bookstore.service.AutorService;
 
 @WebServlet(name = "/Autor", urlPatterns = { "/Autor" })
-public class AutorServlet extends HttpServlet {
+public class AutorServlet extends HttpServlet implements EstabelecerConexaoImpl {
 
 	private static final long serialVersionUID = 1L;
 
@@ -29,13 +30,7 @@ public class AutorServlet extends HttpServlet {
 	public AutorServlet() throws ServletException {
 		super();
 
-		try {
-			AutorDAO autorDAO = new AutorDAO();
-			autorService = new AutorService(autorDAO);
-		} catch (Exception e) {
-			throw new ServletException(
-					"Ocorreu um problema ao tentar se conectar ao banco de dados: " + e.getMessage());
-		}
+		estabelecerConexao();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -96,51 +91,42 @@ public class AutorServlet extends HttpServlet {
 			throws ServletException, IOException {
 		try {
 			autor = new Autor();
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/aaaa");
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-			String acaoBuscar = request.getParameter("acaoBuscar");
+			String codigo = request.getParameter("codigo");
+			String nome = request.getParameter("nome");
+			String dataNascimento = request.getParameter("dataNascimento");
+			String nacionalidade = request.getParameter("nacionalidade");
+			String biografia = request.getParameter("biografia");
 
-			if (acaoBuscar == null || acaoBuscar.isEmpty()) {
-				String codigo = request.getParameter("codigo");
-				String nome = request.getParameter("nome");
-				String dataNascimento = request.getParameter("dataNascimento");
-				String nacionalidade = request.getParameter("nacionalidade");
-				String biografia = request.getParameter("biografia");
+			nome = removerAcentuacaoCampo(nome);
+			nacionalidade = removerAcentuacaoCampo(nacionalidade);
+			biografia = removerAcentuacaoCampo(biografia);
 
-				autor.setCodigo(codigo != null && !codigo.isEmpty() ? Long.parseLong(codigo) : null);
-				autor.setNome(nome);
-				autor.setDataNascimento(
-						dataNascimento != null && !dataNascimento.isEmpty() ? simpleDateFormat.parse(dataNascimento)
-								: null);
-				autor.setNacionalidade(nacionalidade);
-				autor.setBiografia(biografia);
+			autor.setCodigo(codigo != null && !codigo.isEmpty() ? Long.parseLong(codigo) : null);
+			autor.setNome(nome);
 
-				if (autor.getCodigo() != null) {
-					autorService.atualizarAutor(autor);
+			Date dataNascimentoFormatada = simpleDateFormat.parse(dataNascimento);
+			java.sql.Date dataNascimentoConvertida = new java.sql.Date(dataNascimentoFormatada.getTime());
+			autor.setDataNascimento(dataNascimentoConvertida);
 
-					mensagem = "Autor atualizado com sucesso!";
-				} else {
-					autorService.inserirAutor(autor);
+			autor.setNacionalidade(nacionalidade);
+			autor.setBiografia(biografia);
 
-					mensagem = "Autor inserido com sucesso!";
-				}
+			if (autor.getCodigo() != null) {
+				autorService.atualizarAutor(autor);
 
-				requestDispatcher = request.getRequestDispatcher("/paginas/autor/listarAutor.jsp");
-				request.setAttribute("listarAutores", autorService.listarAutores());
-				request.setAttribute("mensagem", mensagem);
-				requestDispatcher.forward(request, response);
-			} else if (acaoBuscar != null && acaoBuscar.equalsIgnoreCase("listarAutoresPorNome")) {
-				String nomeAutor = request.getParameter("nomeAutor");
+				mensagem = "Autor atualizado com sucesso!";
+			} else {
+				autorService.inserirAutor(autor);
 
-				Set<Autor> resultadoBuscaAutores = autorService.listarAutoresPorNome(nomeAutor);
-				String resultadosBusca = processarResultadosPorAutor(resultadoBuscaAutores);
-
-				response.setContentType("text/html");
-				PrintWriter out = response.getWriter();
-				out.print(resultadosBusca);
-
-				request.setAttribute("resultadoBuscaAutores", resultadoBuscaAutores);
+				mensagem = "Autor inserido com sucesso!";
 			}
+
+			requestDispatcher = request.getRequestDispatcher("/paginas/autor/listarAutor.jsp");
+			request.setAttribute("listarAutores", autorService.listarAutores());
+			request.setAttribute("mensagem", mensagem);
+			requestDispatcher.forward(request, response);
 		} catch (Exception e) {
 			requestDispatcher = request.getRequestDispatcher("/paginas/autor/listarAutor.jsp");
 			request.setAttribute("mensagem", "Ocorreu um erro inesperado ao tentar Atualizar e/ou Inserir o Autor!");
@@ -148,26 +134,18 @@ public class AutorServlet extends HttpServlet {
 		}
 	}
 
-	private String processarResultadosPorAutor(Set<Autor> autores) {
-		StringBuilder sb = new StringBuilder();
-
-		if (autores.isEmpty()) {
-			sb.append("<tr><td colspan='6'>Nenhum autor encontrado.</td></tr>");
-		} else {
-			for (Autor autor : autores) {
-				sb.append("<tr>");
-				sb.append("<td>" + autor.getNome() + "</td>");
-				sb.append("<td>" + autor.getDataNascimentoFormatada() + "</td>");
-				sb.append("<td>" + autor.getNacionalidade() + "</td>");
-				sb.append("<td>" + autor.getBiografia() + "</td>");
-				sb.append("<td><a href='<%=request.getContextPath()%>/Autor?acao=atualizarAutor&codigo="
-						+ autor.getCodigo() + "'><i class='glyphicon glyphicon-pencil'></i></a></td>");
-				sb.append("<td><a href='<%=request.getContextPath()%>/Autor?acao=removerAutor&codigo="
-						+ autor.getCodigo() + "'><i class='glyphicon glyphicon-trash'></i></a></td>");
-				sb.append("</tr>");
-			}
+	@Override
+	public void estabelecerConexao() throws ServletException {
+		try {
+			AutorDAO autorDAO = new AutorDAO();
+			autorService = new AutorService(autorDAO);
+		} catch (Exception e) {
+			throw new ServletException(
+					"Ocorreu um problema ao tentar se conectar ao banco de dados: " + e.getMessage());
 		}
+	}
 
-		return sb.toString();
+	private String removerAcentuacaoCampo(String campo) {
+		return Normalizer.normalize(campo, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
 	}
 }
